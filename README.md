@@ -9,3 +9,5 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 `nvm install`
 
 `npm install`
+
+`npm run dev`
