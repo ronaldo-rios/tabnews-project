@@ -23,13 +23,14 @@ async function query(queryObj) {
 }
 
 function getSSLOptions() {
+
   // If we have a CA, we need to use SSL
-  if (process.env.PROSTGRES_CA) {
+  if (process.env.PROSTGRES_CA !== undefined) {
     return {
       ca: process.env.PROSTGRES_CA,
     };
   }
-  // In development, we don't need SSL
+  // In development, we don't need SSL to connect to the database
   return process.env.NODE_ENV === "development" ? false : true;
 }
 
