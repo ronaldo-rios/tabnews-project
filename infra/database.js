@@ -9,7 +9,7 @@ async function query(queryObj) {
     port: process.env.POSTGRES_PORT,
     ssl: getSSLOptions(),
   });
-
+  console.log("ssl", process.env.POSTGRES_CA);
   try {
     await client.connect();
     const result = await client.query(queryObj);
@@ -23,11 +23,10 @@ async function query(queryObj) {
 }
 
 function getSSLOptions() {
-
   // If we have a CA, we need to use SSL
-  if (process.env.PROSTGRES_CA) {
+  if (process.env.POSTGRES_CA !== "") {
     return {
-      ca: process.env.PROSTGRES_CA,
+      ca: process.env.POSTGRES_CA,
     };
   }
   // In development, we don't need SSL to connect to the database
