@@ -7,6 +7,7 @@ async function query(queryObj) {
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
     port: process.env.POSTGRES_PORT,
+    ssl: getSSLOptions(),
   });
 
   try {
@@ -19,6 +20,17 @@ async function query(queryObj) {
   } finally {
     await client.end();
   }
+}
+
+function getSSLOptions() {
+  // If we have a CA, we need to use SSL
+  if (process.env.PROSTGRES_CA) {
+    return {
+      ca: process.env.PROSTGRES_CA
+    }
+  }
+  // In development, we don't need SSL
+  return process.env.NODE_ENV === 'development' ? false : true
 }
 
 export default {
