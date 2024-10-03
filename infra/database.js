@@ -24,7 +24,7 @@ async function query(queryObj) {
 
 function getSSLOptions() {
   // If we have a CA, we need to use SSL
-  if (process.env.POSTGRES_CA !== "") {
+  if (process.env.POSTGRES_CA) {
     return {
       ca: process.env.POSTGRES_CA,
     };
