@@ -26,11 +26,11 @@ function getSSLOptions() {
   // If we have a CA, we need to use SSL
   if (process.env.PROSTGRES_CA) {
     return {
-      ca: process.env.PROSTGRES_CA
-    }
+      ca: process.env.PROSTGRES_CA,
+    };
   }
   // In development, we don't need SSL
-  return process.env.NODE_ENV === 'development' ? false : true
+  return process.env.NODE_ENV === "development" ? false : true;
 }
 
 export default {
