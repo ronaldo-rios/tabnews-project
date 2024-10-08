@@ -1,10 +1,8 @@
 import database from "infra/database";
 
 const cleanDatabase = async () => {
-  await database.query(
-    "DROP SCHEMA public CASCADE; CREATE SCHEMA public;",
-  );
-}
+  await database.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
+};
 
 beforeAll(async () => {
   await cleanDatabase();
@@ -35,5 +33,3 @@ test("POST to api/v1/migrations should return 200", async () => {
   expect(Array.isArray(responseBody)).toBe(true);
   expect(responseBody.length).toBe(0);
 });
-
-

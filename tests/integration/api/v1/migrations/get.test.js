@@ -1,10 +1,8 @@
 import database from "infra/database";
 
 const cleanDatabase = async () => {
-  await database.query(
-    "DROP SCHEMA public CASCADE; CREATE SCHEMA public;",
-  );
-}
+  await database.query("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
+};
 
 beforeAll(async () => {
   await cleanDatabase();
