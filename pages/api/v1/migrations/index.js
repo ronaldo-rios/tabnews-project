@@ -3,35 +3,42 @@ import migrationRunner from "node-pg-migrate";
 import { join } from "node:path";
 
 export default async function migrations(request, response) {
+  const allowedMethods = ["GET", "POST"];
+  if (!allowedMethods.includes(request.method)) {
+    return response.status(405).json({ error: "Method not allowed" });
+  }
 
-    const dbClient = await database.getNewClient();
+  let dbClient;
+  try {
+    dbClient = await database.getNewClient();
     const defaultMigrationOptions = {
-        dbClient: dbClient,
-        dryRun: true,
-        dir: join("infra", "migrations"),
-        direction: "up",
-        verbose: true,
-        migrationsTable: "pgmigrations",
+      dbClient: dbClient,
+      dryRun: true,
+      dir: join("infra", "migrations"),
+      direction: "up",
+      verbose: true,
+      migrationsTable: "pgmigrations",
     };
 
     if (request.method === "GET") {
-        const pedingMigrations = await migrationRunner(defaultMigrationOptions);
-        await dbClient.end();
-        response.status(200).json(pedingMigrations);
+      const pedingMigrations = await migrationRunner(defaultMigrationOptions);
+      return response.status(200).json(pedingMigrations);
     }
 
     if (request.method === "POST") {
-        const migratedMigrations = await migrationRunner({
-            ...defaultMigrationOptions,
-            dryRun: false,
-        });
+      const migratedMigrations = await migrationRunner({
+        ...defaultMigrationOptions,
+        dryRun: false,
+      });
 
-        await dbClient.end();
-
-        migratedMigrations.length > 0
-            ? response.status(201).json(migratedMigrations)
-            : response.status(200).json(migratedMigrations);
+      return migratedMigrations.length > 0
+        ? response.status(201).json(migratedMigrations)
+        : response.status(200).json(migratedMigrations);
     }
-
-    response.status(405).json({ error: error.message });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  } finally {
+    await dbClient.end();
+  }
 }
