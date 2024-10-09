@@ -15,3 +15,11 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 ### Run application
 
 `npm run dev`
+
+### Create and Run tests
+
+`npm run test`
+
+### Create and Run Migrations
+
+`migration:up`
