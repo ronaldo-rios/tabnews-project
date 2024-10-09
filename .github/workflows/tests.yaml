@@ -18,5 +18,3 @@ jobs:
           NEXT_COMMAND="next dev"
           JEST_COMMAND="jest --runInBand --verbose"
           npm run services:up && concurrently -n next,jest --hide next -k -s command-jest "$NEXT_COMMAND" "$JEST_COMMAND"
-
-
