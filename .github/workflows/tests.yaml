@@ -1,0 +1,22 @@
+name: Automated tests
+
+on: pull_request
+
+jobs:
+  jest:
+    name: Jest Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/hydrogen"
+
+      - run: npm ci
+      - run: |
+          NEXT_COMMAND="next dev"
+          JEST_COMMAND="jest --runInBand --verbose"
+          npm run services:up && npx concurrently -n next,jest --hide next -k -s command-jest "$NEXT_COMMAND" "$JEST_COMMAND"
+
+
