@@ -14,5 +14,9 @@ jobs:
           node-version: "lts/hydrogen"
 
       - run: npm ci
-      - run: npm run services:up && npx concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"
+      - run: |
+          NEXT_COMMAND="next dev"
+          JEST_COMMAND="jest --runInBand --verbose"
+          npm run services:up && npx concurrently -n next,jest --hide next -k -s command-jest "$NEXT_COMMAND" "$JEST_COMMAND"
+
 
