@@ -24,5 +24,17 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 
 ### Create and Run Migrations
 
-`migration:create migration-name`
-`migration:up`
+`migrations:create migration-name`
+
+`migrations:up`
+
+### Utils commands to manage dependencies
+
+- Check outdated dependencies comparing with current version, wanted version and latest version:
+  `npm outdated`
+
+- Check vulnerabilities in dependencies:
+  `npm audit`
+
+- Compare outdated dependencies with latest version and update package.json:
+  `npx npm-check-updates -i`
