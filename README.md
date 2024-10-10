@@ -25,4 +25,5 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 ### Create and Run Migrations
 
 `migration:create migration-name`
+
 `migration:up`
