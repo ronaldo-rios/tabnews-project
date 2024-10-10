@@ -15,7 +15,6 @@
     "lint:eslint:check": "next lint --dir .",
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll --runInBand",
-    "posttest": "npm run services:stop",
     "prepare": "husky"
   },
   "author": "Ronaldo Rios",
