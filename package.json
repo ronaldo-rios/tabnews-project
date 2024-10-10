@@ -20,7 +20,7 @@
   "author": "Ronaldo Rios",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "16.4.4",
+    "dotenv": "16.4.5",
     "dotenv-expand": "11.0.6",
     "next": "14.2.15",
     "node-pg-migrate": "6.2.2",
