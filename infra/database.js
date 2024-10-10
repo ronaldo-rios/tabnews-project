@@ -1,4 +1,4 @@
-import { Client } from "pg"
+import { Client } from 'pg'
 
 async function query(queryObj) {
   let client
@@ -16,13 +16,13 @@ async function query(queryObj) {
 
 function getSSLOptions() {
   // If we have a CA, we need to use SSL
-  if (process.env.POSTGRES_CA !== "") {
+  if (process.env.POSTGRES_CA !== '') {
     return {
       ca: process.env.POSTGRES_CA,
     }
   }
   // In development, we don't need SSL to connect to the database
-  return process.env.NODE_ENV === "development" ? false : true
+  return process.env.NODE_ENV === 'development' ? false : true
 }
 
 async function getNewClient() {
