@@ -13,8 +13,8 @@
     "lint:eslint:check": "next lint --dir .",
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll --runInBand",
-    "migration:create": "node-pg-migrate --migrations-dir infra/migrations create",
-    "migration:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
+    "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
+    "migrations:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
     "prepare": "husky"
   },
   "author": "Ronaldo Rios",
