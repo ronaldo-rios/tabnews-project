@@ -36,7 +36,7 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 
 - Check vulnerabilities in dependencies:
 
-`npm audit`
+  `npm audit`
 
 - Compare outdated dependencies with latest version and update package.json:
 
