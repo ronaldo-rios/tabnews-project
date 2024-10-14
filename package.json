@@ -4,10 +4,11 @@
   "description": "Creation and study project development of tabnews clone Filipe Deschamps from https://curso.dev/",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run services:up && next dev",
+    "dev": "npm run services:up && npm run services:wait:database && npm run migrations:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
+    "services:wait:database": "node infra/scripts/wait-for-db-connection.js",
     "migrations:create": "node-pg-migrate --migrations-dir infra/migrations create",
     "migrations:up": "node-pg-migrate --migrations-dir infra/migrations --envPath .env.development up",
     "lint:prettier:check": "prettier --check .",
@@ -16,6 +17,12 @@
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll --runInBand",
     "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run lint:prettier:fix",
+      "npm run lint:eslint:check"
+    ]
   },
   "author": "Ronaldo Rios",
   "license": "MIT",
@@ -36,6 +43,7 @@
     "eslint-plugin-jest": "28.8.3",
     "husky": "9.1.4",
     "jest": "29.7.0",
+    "lint-staged": "15.2.10",
     "prettier": "3.3.3"
   }
 }
