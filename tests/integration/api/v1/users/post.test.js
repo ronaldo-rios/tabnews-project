@@ -1,5 +1,7 @@
 import database from 'infra/database'
 import migrator from 'models/migrator'
+import password from 'models/password'
+import user from 'models/user'
 import { BASE_URL } from 'tests/integration/api/v1/config.integration'
 import { version as uuidversion } from 'uuid'
 
@@ -32,7 +34,7 @@ describe('POST /api/v1/users', () => {
       id: responseBody.id,
       username: 'testuser',
       email: 'contact@testuser.com',
-      password: 'pass123',
+      password: responseBody.password,
       created_at: responseBody.created_at,
       updated_at: responseBody.updated_at,
     })
@@ -40,6 +42,14 @@ describe('POST /api/v1/users', () => {
     expect(uuidversion(responseBody.id)).toBe(4)
     expect(Date.parse(responseBody.created_at)).not.toBeNaN()
     expect(Date.parse(responseBody.updated_at)).not.toBeNaN()
+
+    const userInDatabase = await user.findOneByUsername('testuser')
+    const correctPasswordMatch = await password.compare(
+      'pass123',
+      userInDatabase.password,
+    )
+
+    expect(correctPasswordMatch).toBe(true)
   })
 
   test('With duplicated email', async () => {

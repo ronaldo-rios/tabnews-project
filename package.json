@@ -27,6 +27,7 @@
   "author": "Ronaldo Rios",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "3.0.2",
     "dotenv": "16.4.5",
     "dotenv-expand": "11.0.6",
     "next": "14.2.15",
