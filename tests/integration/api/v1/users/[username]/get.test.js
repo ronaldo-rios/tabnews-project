@@ -1,5 +1,5 @@
 import { BASE_URL } from 'tests/config.integration'
-import orchestrator from 'tests/orchestrator.js'
+import orchestrator from 'tests/orchestrator'
 import { version as uuidversion } from 'uuid'
 
 beforeAll(async () => {
@@ -10,19 +10,11 @@ beforeAll(async () => {
 
 describe('GET /api/v1/users/[username]', () => {
   test('With exact case match', async () => {
-    const response = await fetch(`${BASE_URL}/api/v1/users`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: 'exactcase',
-        email: 'contact@exactcase.com',
-        password: 'pass123',
-      }),
+    await orchestrator.createUser({
+      username: 'exactcase',
+      email: 'contact@exactcase.com',
+      password: 'pass123',
     })
-
-    expect(response.status).toBe(201)
 
     const getResponse = await fetch(`${BASE_URL}/api/v1/users/exactcase`)
 
@@ -44,19 +36,11 @@ describe('GET /api/v1/users/[username]', () => {
   })
 
   test('With case mismatch', async () => {
-    const response = await fetch(`${BASE_URL}/api/v1/users`, {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: 'casedifferent',
-        email: 'contact@case.different.com',
-        password: 'pass123',
-      }),
+    await orchestrator.createUser({
+      username: 'casedifferent',
+      email: 'contact@case.different.com',
+      password: 'pass123',
     })
-
-    expect(response.status).toBe(201)
 
     const getResponse = await fetch(`${BASE_URL}/api/v1/users/CaseDifferent`)
 
