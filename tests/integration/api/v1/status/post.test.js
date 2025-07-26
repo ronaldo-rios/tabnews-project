@@ -1,4 +1,7 @@
-import { BASE_URL } from 'tests/integration/api/v1/config.integration'
+import { BASE_URL } from 'tests/config.integration'
+import orchestrator from 'tests/orchestrator'
+
+beforeAll(() => orchestrator.waitForServerAvailability())
 
 // Test to validate method not allowed to endpoint:
 describe('POST to api/v1/status', () => {

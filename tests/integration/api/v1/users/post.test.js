@@ -1,16 +1,13 @@
-import database from 'infra/database'
-import migrator from 'models/migrator'
 import password from 'models/password'
 import user from 'models/user'
-import { BASE_URL } from 'tests/integration/api/v1/config.integration'
+import { BASE_URL } from 'tests/config.integration'
+import orchestrator from 'tests/orchestrator.js'
 import { version as uuidVersion } from 'uuid'
 
-const cleanDatabase = async () => {
-  await database.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
-}
-
 beforeAll(async () => {
-  await cleanDatabase(), await migrator.runPendingMigrations()
+  await orchestrator.waitForServerAvailability()
+  await orchestrator.clearDatabase()
+  await orchestrator.runPendingMigrations()
 })
 
 describe('POST /api/v1/users', () => {
