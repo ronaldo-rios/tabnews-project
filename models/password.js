@@ -10,7 +10,7 @@ async function compare(providedPassword, storedPasswordHash) {
 }
 
 function getNumberOfRounds() {
-  return process.env.NODE_ENV === 'production' ? 14 : 7
+  return process.env.NODE_ENV === 'development' ? 7 : 14
 }
 
 const password = {

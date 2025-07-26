@@ -3,7 +3,7 @@ import migrator from 'models/migrator'
 import password from 'models/password'
 import user from 'models/user'
 import { BASE_URL } from 'tests/integration/api/v1/config.integration'
-import { version as uuidversion } from 'uuid'
+import { version as uuidVersion } from 'uuid'
 
 const cleanDatabase = async () => {
   await database.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
@@ -39,7 +39,7 @@ describe('POST /api/v1/users', () => {
       updated_at: responseBody.updated_at,
     })
 
-    expect(uuidversion(responseBody.id)).toBe(4)
+    expect(uuidVersion(responseBody.id)).toBe(4)
     expect(Date.parse(responseBody.created_at)).not.toBeNaN()
     expect(Date.parse(responseBody.updated_at)).not.toBeNaN()
 
