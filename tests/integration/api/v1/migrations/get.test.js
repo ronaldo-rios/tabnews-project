@@ -1,5 +1,5 @@
 import { BASE_URL } from 'tests/config.integration'
-import orchestrator from 'tests/orchestrator.js'
+import orchestrator from 'tests/orchestrator'
 
 beforeAll(async () => {
   await orchestrator.waitForServerAvailability()

@@ -1,7 +1,7 @@
 import password from 'models/password'
 import user from 'models/user'
 import { BASE_URL } from 'tests/config.integration'
-import orchestrator from 'tests/orchestrator.js'
+import orchestrator from 'tests/orchestrator'
 import { version as uuidVersion } from 'uuid'
 
 beforeAll(async () => {
