@@ -1,11 +1,10 @@
-import database from 'infra/database'
-import { BASE_URL } from 'tests/integration/api/v1/config.integration'
+import { BASE_URL } from 'tests/config.integration'
+import orchestrator from 'tests/orchestrator.js'
 
-const cleanDatabase = async () => {
-  await database.query('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
-}
-
-beforeAll(async () => await cleanDatabase())
+beforeAll(async () => {
+  await orchestrator.waitForServerAvailability()
+  await orchestrator.clearDatabase()
+})
 
 describe('POST /api/v1/migrations', () => {
   describe('Running pending migrations', () => {
