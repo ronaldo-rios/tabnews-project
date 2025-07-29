@@ -24,31 +24,6 @@ async function create(userData) {
   }
 }
 
-async function findOneByUsername(username) {
-  const user = await queryUser(username)
-  return user
-
-  async function queryUser(username) {
-    const result = await database.query({
-      text: `
-          SELECT * FROM users
-          WHERE LOWER(username) = LOWER($1)
-          LIMIT 1;
-        `,
-      values: [username],
-    })
-
-    if (result.rowCount === 0) {
-      throw new NotFoundError({
-        message: 'Username informado não foi encontrado no sistema.',
-        action: 'Verifique se o username foi enviado corretamente.',
-      })
-    }
-
-    return result.rows[0]
-  }
-}
-
 async function update(username, userInputValues) {
   const currentUser = await findOneByUsername(username)
 
@@ -93,6 +68,56 @@ async function update(username, userInputValues) {
   }
 }
 
+async function findOneByUsername(username) {
+  const user = await queryUser(username)
+  return user
+
+  async function queryUser(username) {
+    const result = await database.query({
+      text: `
+          SELECT * FROM users
+          WHERE LOWER(username) = LOWER($1)
+          LIMIT 1;
+        `,
+      values: [username],
+    })
+
+    if (result.rowCount === 0) {
+      throw new NotFoundError({
+        message: 'Username informado não foi encontrado no sistema.',
+        action: 'Verifique se o username foi enviado corretamente.',
+      })
+    }
+
+    return result.rows[0]
+  }
+}
+
+async function findOneByEmail(email) {
+  const user = await queryEmail(email)
+  return user
+
+  async function queryEmail(email) {
+    const result = await database.query({
+      text: `
+          SELECT * FROM users
+          WHERE LOWER(email) = LOWER(TRIM($1))
+          LIMIT 1;
+        `,
+      values: [email],
+    })
+
+    if (result.rowCount === 0) {
+      throw new NotFoundError({
+        message: 'E-mail informado não foi encontrado no sistema.',
+        action: 'Verifique se o e-mail foi enviado corretamente.',
+      })
+    }
+
+    return result.rows[0]
+  }
+}
+
 async function validateUniqueUsername(username) {
   const usernameResult = await database.query({
     text: `SELECT username 
@@ -132,8 +157,9 @@ async function hashPasswordInObject(userInputValues) {
 
 const user = {
   create,
-  findOneByUsername,
   update,
+  findOneByUsername,
+  findOneByEmail,
 }
 
 export default user
