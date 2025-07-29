@@ -24,9 +24,9 @@ Creation and study project development of tabnews clone Filipe Deschamps from ht
 
 ### Create and Run Migrations
 
-`migrations:create migration-name`
+`npm run migrations:create migration-name`
 
-`migrations:up`
+`npm run migrations:up`
 
 ### Utils commands to manage dependencies
 
