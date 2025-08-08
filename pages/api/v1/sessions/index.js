@@ -1,4 +1,3 @@
-import * as cookie from 'cookie'
 import controller from 'infra/controller'
 import authentication from 'models/authentication'
 import session from 'models/session'
@@ -15,14 +14,7 @@ async function postSessions(request, response) {
     inputValues.password,
   )
   const generatedSession = await session.create(authenticatedUser.id)
-
-  const setCookie = cookie.serialize('session_id', generatedSession.token, {
-    path: '/',
-    maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000,
-    secure: process.env.NODE_ENV === 'development' ? false : true,
-    httpOnly: true,
-  })
-  response.setHeader('Set-Cookie', setCookie)
+  controller.setSessionCookie(generatedSession.token, response)
 
   return response.status(201).json(generatedSession)
 }
