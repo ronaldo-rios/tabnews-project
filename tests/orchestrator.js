@@ -6,6 +6,8 @@ import session from 'models/session'
 import user from 'models/user'
 import { BASE_URL } from 'tests/config.integration'
 
+const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`
+
 async function waitForServerAvailability() {
   await waitForWebServer()
 
@@ -46,12 +48,34 @@ async function createSession(userId) {
   return await session.create(userId)
 }
 
+async function deleteAllEmails() {
+  await fetch(`${emailHttpUrl}/messages`, {
+    method: 'DELETE',
+  })
+}
+
+async function getLastEmail() {
+  const emailListResponse = await fetch(`${emailHttpUrl}/messages`)
+  const emailListBody = await emailListResponse.json()
+  const lastEmailItem = emailListBody.pop()
+
+  const emailTextResponse = await fetch(
+    `${emailHttpUrl}/messages/${lastEmailItem.id}.plain`,
+  )
+  const emailTextBody = await emailTextResponse.text()
+
+  lastEmailItem.text = emailTextBody
+  return lastEmailItem
+}
+
 const orchestrator = {
   waitForServerAvailability,
   clearDatabase,
   runPendingMigrations,
   createUser,
   createSession,
+  deleteAllEmails,
+  getLastEmail,
 }
 
 export default orchestrator
