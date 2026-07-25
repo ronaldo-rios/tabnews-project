@@ -26,6 +26,7 @@ describe('GET /api/v1/users/[username]', () => {
       username: 'exactcase',
       email: 'contact@exactcase.com',
       password: responseBody.password,
+      features: [],
       created_at: responseBody.created_at,
       updated_at: responseBody.updated_at,
     })
@@ -52,6 +53,7 @@ describe('GET /api/v1/users/[username]', () => {
       username: 'casedifferent',
       email: 'contact@case.different.com',
       password: responseBody.password,
+      features: [],
       created_at: responseBody.created_at,
       updated_at: responseBody.updated_at,
     })
