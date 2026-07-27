@@ -3,15 +3,15 @@ import authentication from 'models/authentication'
 import session from 'models/session'
 import { createRouter } from 'next-connect'
 
-const router = createRouter()
-router.post(postSessions)
-router.delete(deleteSession)
-
-export default router.handler(controller.errorHandlers)
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .post(controller.canRequest('create:session'), postSessions)
+  .delete(deleteSession)
+  .handler(controller.errorHandlers)
 
 async function postSessions(request, response) {
   const inputValues = request.body
-  const authenticatedUser = await authentication.validateAuth(
+  const authenticatedUser = await authentication.validateAuthentication(
     inputValues.email,
     inputValues.password,
   )

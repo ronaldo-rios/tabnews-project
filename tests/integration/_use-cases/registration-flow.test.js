@@ -14,6 +14,7 @@ beforeAll(async () => {
 describe('Use case: Registration Flow (all successful)', () => {
   let createUserResponseBody
   let activationTokenId
+  let createSessionsResponseBody
 
   test('Create user account', async () => {
     const createUserResponse = await fetch(`${BASE_URL}/api/v1/users`, {
@@ -80,7 +81,25 @@ describe('Use case: Registration Flow (all successful)', () => {
     expect(activatedUser.features).toEqual(['create:session'])
   })
 
-  test('Login', async () => {})
+  test('Login', async () => {
+    const createSessionsResponse = await fetch(
+      `${webserver.origin}/api/v1/sessions`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: 'registration.flow@test.dev',
+          password: 'RegistrationFlowPassword',
+        }),
+      },
+    )
+
+    expect(createSessionsResponse.status).toBe(201)
+    createSessionsResponseBody = await createSessionsResponse.json()
+    expect(createSessionsResponseBody.user_id).toBe(createUserResponseBody.id)
+  })
 
   test('Get user information', async () => {})
 })
