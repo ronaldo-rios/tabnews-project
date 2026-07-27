@@ -1,5 +1,6 @@
 import webserver from 'infra/webserver'
 import activation from 'models/activation'
+import user from 'models/user'
 import { BASE_URL } from 'tests/config.integration'
 import orchestrator from 'tests/orchestrator'
 
@@ -63,7 +64,21 @@ describe('Use case: Registration Flow (all successful)', () => {
     expect(activationTokenObject.used_at).toBe(null)
   })
 
-  test('Activate account', async () => {})
+  test('Activate account', async () => {
+    const activationResponse = await fetch(
+      `${webserver.origin}/api/v1/activations/${activationTokenId}`,
+      {
+        method: 'PATCH',
+      },
+    )
+
+    expect(activationResponse.status).toBe(200)
+    const activationResponseBody = await activationResponse.json()
+    expect(Date.parse(activationResponseBody.used_at)).not.toBeNaN()
+
+    const activatedUser = await user.findOneByUsername('RegistrationFlow')
+    expect(activatedUser.features).toEqual(['create:session'])
+  })
 
   test('Login', async () => {})
 
