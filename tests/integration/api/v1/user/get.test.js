@@ -39,6 +39,7 @@ describe('GET /api/v1/user', () => {
         username: 'UserWithValidSession',
         email: createdUser.email,
         password: createdUser.password,
+        features: ['read:activation_token'],
         created_at: createdUser.created_at.toISOString(),
         updated_at: createdUser.updated_at.toISOString(),
       })
@@ -101,6 +102,7 @@ describe('GET /api/v1/user', () => {
         username: 'UserWithHalfwayExpiredSession',
         email: createdUser.email,
         password: createdUser.password,
+        features: ['read:activation_token'],
         created_at: createdUser.created_at.toISOString(),
         updated_at: createdUser.updated_at.toISOString(),
       })
@@ -155,6 +157,19 @@ describe('GET /api/v1/user', () => {
         action: 'Verifique se este usuário está logado e tente novamente.',
         status_code: 401,
       })
+
+      // Set-Cookie assertions
+      const parsedSetCookie = setCookieParser(response, {
+        map: true,
+      })
+
+      expect(parsedSetCookie.session_id).toEqual({
+        name: 'session_id',
+        value: 'invalid',
+        maxAge: -1,
+        path: '/',
+        httpOnly: true,
+      })
     })
 
     test('With expired session', async () => {
@@ -185,6 +200,19 @@ describe('GET /api/v1/user', () => {
         message: 'Usuário não possui sessão ativa.',
         action: 'Verifique se este usuário está logado e tente novamente.',
         status_code: 401,
+      })
+
+      // Set-Cookie assertions
+      const parsedSetCookie = setCookieParser(response, {
+        map: true,
+      })
+
+      expect(parsedSetCookie.session_id).toEqual({
+        name: 'session_id',
+        value: 'invalid',
+        maxAge: -1,
+        path: '/',
+        httpOnly: true,
       })
     })
   })
