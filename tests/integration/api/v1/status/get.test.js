@@ -1,11 +1,11 @@
-import { BASE_URL } from 'tests/config.integration'
+import webserver from 'infra/webserver'
 import orchestrator from 'tests/orchestrator'
 
 beforeAll(() => orchestrator.waitForServerAvailability())
 
 describe('GET to api/v1/status', () => {
   test('Retrieving current system status', async () => {
-    const response = await fetch(`${BASE_URL}/api/v1/status`)
+    const response = await fetch(`${webserver.origin}/api/v1/status`)
     expect(response.status).toBe(200)
 
     const responseBody = await response.json()

@@ -1,4 +1,4 @@
-import { BASE_URL } from 'tests/config.integration'
+import webserver from 'infra/webserver'
 import orchestrator from 'tests/orchestrator'
 
 beforeAll(async () => {
@@ -11,7 +11,7 @@ describe('POST /api/v1/migrations', () => {
     test('should return 201 for the first time', async () => {
       /* When exists pending migrations to run the status code should be 201 
       after run the migrations */
-      const response = await fetch(`${BASE_URL}/api/v1/migrations`, {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: 'POST',
       })
       expect(response.status).toBe(201)
@@ -24,7 +24,7 @@ describe('POST /api/v1/migrations', () => {
     test('should return 200 for the second time', async () => {
       /* When not exists pending migrations to run the status code should be 200 
       why the migrations are already up */
-      const response = await fetch(`${BASE_URL}/api/v1/migrations`, {
+      const response = await fetch(`${webserver.origin}/api/v1/migrations`, {
         method: 'POST',
       })
       expect(response.status).toBe(200)

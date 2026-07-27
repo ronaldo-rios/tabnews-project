@@ -1,10 +1,11 @@
 import { faker } from '@faker-js/faker'
 import retry from 'async-retry'
 import database from 'infra/database'
+import webserver from 'infra/webserver'
+import activation from 'models/activation'
 import migrator from 'models/migrator'
 import session from 'models/session'
 import user from 'models/user'
-import { BASE_URL } from 'tests/config.integration'
 
 const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`
 
@@ -18,7 +19,7 @@ async function waitForServerAvailability() {
     })
 
     async function fetchStatusPage() {
-      const response = await fetch(`${BASE_URL}/api/v1/status`)
+      const response = await fetch(`${webserver.origin}/api/v1/status`)
 
       if (response.status !== 200) {
         throw Error()
@@ -77,6 +78,10 @@ function extractUUID(text) {
   return match ? match[0] : null
 }
 
+async function activateUser(inactiveUser) {
+  return await activation.activateUserByUserId(inactiveUser.id)
+}
+
 const orchestrator = {
   waitForServerAvailability,
   clearDatabase,
@@ -86,6 +91,7 @@ const orchestrator = {
   deleteAllEmails,
   getLastEmail,
   extractUUID,
+  activateUser,
 }
 
 export default orchestrator

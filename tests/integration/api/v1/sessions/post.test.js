@@ -1,6 +1,7 @@
+import webserver from 'infra/webserver'
 import session from 'models/session'
 import setCookieParser from 'set-cookie-parser'
-import { BASE_URL } from 'tests/config.integration'
+
 import orchestrator from 'tests/orchestrator'
 import { version as uuidVersion } from 'uuid'
 
@@ -16,7 +17,7 @@ describe('POST /api/v1/sessions', () => {
       password: 'correctPass',
     })
 
-    const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -44,7 +45,7 @@ describe('POST /api/v1/sessions', () => {
       email: 'email.correct@gmail.com',
     })
 
-    const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,7 +71,7 @@ describe('POST /api/v1/sessions', () => {
   test('With incorrect email and incorrect password', async () => {
     await orchestrator.createUser()
 
-    const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +100,9 @@ describe('POST /api/v1/sessions', () => {
       password: 'correct#pass',
     })
 
-    const response = await fetch(`${BASE_URL}/api/v1/sessions`, {
+    await orchestrator.activateUser(createdUser)
+
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

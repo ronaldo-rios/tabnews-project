@@ -1,6 +1,6 @@
+import webserver from 'infra/webserver'
 import password from 'models/password'
 import user from 'models/user'
-import { BASE_URL } from 'tests/config.integration'
 import orchestrator from 'tests/orchestrator'
 import { version as uuidVersion } from 'uuid'
 
@@ -13,7 +13,7 @@ beforeAll(async () => {
 describe('PATCH /api/v1/users/[username]', () => {
   test('With nonexistent username', async () => {
     const response = await fetch(
-      `${BASE_URL}/api/v1/users/UsuarioInexistente`,
+      `${webserver.origin}/api/v1/users/UsuarioInexistente`,
       {
         method: 'PATCH',
       },
@@ -40,7 +40,7 @@ describe('PATCH /api/v1/users/[username]', () => {
       username: 'user2',
     })
 
-    const response = await fetch(`${BASE_URL}/api/v1/users/user2`, {
+    const response = await fetch(`${webserver.origin}/api/v1/users/user2`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ describe('PATCH /api/v1/users/[username]', () => {
     })
 
     const response = await fetch(
-      `${BASE_URL}/api/v1/users/${createdUser2.username}`,
+      `${webserver.origin}/api/v1/users/${createdUser2.username}`,
       {
         method: 'PATCH',
         headers: {
@@ -104,7 +104,7 @@ describe('PATCH /api/v1/users/[username]', () => {
     })
 
     const response = await fetch(
-      `${BASE_URL}/api/v1/users/${createUser.username}`,
+      `${webserver.origin}/api/v1/users/${createUser.username}`,
       {
         method: 'PATCH',
         headers: {
@@ -144,7 +144,7 @@ describe('PATCH /api/v1/users/[username]', () => {
     })
 
     const response = await fetch(
-      `${BASE_URL}/api/v1/users/${createdUser.username}`,
+      `${webserver.origin}/api/v1/users/${createdUser.username}`,
       {
         method: 'PATCH',
         headers: {
@@ -183,7 +183,7 @@ describe('PATCH /api/v1/users/[username]', () => {
     })
 
     const response = await fetch(
-      `${BASE_URL}/api/v1/users/${createdUserNewPass.username}`,
+      `${webserver.origin}/api/v1/users/${createdUserNewPass.username}`,
       {
         method: 'PATCH',
         headers: {

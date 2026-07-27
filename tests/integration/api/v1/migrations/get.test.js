@@ -1,4 +1,4 @@
-import { BASE_URL } from 'tests/config.integration'
+import webserver from 'infra/webserver'
 import orchestrator from 'tests/orchestrator'
 
 beforeAll(async () => {
@@ -8,7 +8,7 @@ beforeAll(async () => {
 
 describe('GET to api/v1/migrations', () => {
   test('Retrieving pending migrations', async () => {
-    const response = await fetch(`${BASE_URL}/api/v1/migrations`)
+    const response = await fetch(`${webserver.origin}/api/v1/migrations`)
     expect(response.status).toBe(200)
 
     const responseBody = await response.json()
