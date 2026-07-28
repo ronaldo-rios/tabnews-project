@@ -2,10 +2,11 @@ import controller from 'infra/controller'
 import user from 'models/user'
 import { createRouter } from 'next-connect'
 
-const router = createRouter()
-router.get(getUsers)
-router.patch(patchUsers)
-export default router.handler(controller.errorHandlers)
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .get(getUsers)
+  .patch(controller.canRequest('update:user'), patchUsers)
+  .handler(controller.errorHandlers)
 
 async function getUsers(request, response) {
   const username = request.query.username

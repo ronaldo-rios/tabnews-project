@@ -3,9 +3,10 @@ import activation from 'models/activation'
 import user from 'models/user'
 import { createRouter } from 'next-connect'
 
-const router = createRouter()
-router.post(postUsers)
-export default router.handler(controller.errorHandlers)
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .post(controller.canRequest('create:user'), postUsers)
+  .handler(controller.errorHandlers)
 
 async function postUsers(request, response) {
   const userInputValues = request.body
