@@ -1,4 +1,4 @@
-import { BASE_URL } from 'tests/config.integration'
+import webserver from 'infra/webserver'
 import orchestrator from 'tests/orchestrator'
 
 beforeAll(() => orchestrator.waitForServerAvailability())
@@ -6,7 +6,7 @@ beforeAll(() => orchestrator.waitForServerAvailability())
 // Test to validate method not allowed to endpoint:
 describe('POST to api/v1/status', () => {
   test('Retrieving current system status', async () => {
-    const response = await fetch(`${BASE_URL}/api/v1/status`, {
+    const response = await fetch(`${webserver.origin}/api/v1/status`, {
       method: 'POST',
     })
     expect(response.status).toBe(405)

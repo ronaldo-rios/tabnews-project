@@ -1,4 +1,4 @@
-import { BASE_URL } from 'tests/config.integration'
+import webserver from 'infra/webserver'
 import orchestrator from 'tests/orchestrator'
 import { version as uuidversion } from 'uuid'
 
@@ -16,7 +16,9 @@ describe('GET /api/v1/users/[username]', () => {
       password: 'pass123',
     })
 
-    const getResponse = await fetch(`${BASE_URL}/api/v1/users/exactcase`)
+    const getResponse = await fetch(
+      `${webserver.origin}/api/v1/users/exactcase`,
+    )
 
     expect(getResponse.status).toBe(200)
 
@@ -43,7 +45,9 @@ describe('GET /api/v1/users/[username]', () => {
       password: 'pass123',
     })
 
-    const getResponse = await fetch(`${BASE_URL}/api/v1/users/CaseDifferent`)
+    const getResponse = await fetch(
+      `${webserver.origin}/api/v1/users/CaseDifferent`,
+    )
 
     expect(getResponse.status).toBe(200)
 
@@ -64,7 +68,7 @@ describe('GET /api/v1/users/[username]', () => {
   })
 
   test('With nonexistent username', async () => {
-    const getResponse = await fetch(`${BASE_URL}/api/v1/users/notexist`)
+    const getResponse = await fetch(`${webserver.origin}/api/v1/users/notexist`)
 
     expect(getResponse.status).toBe(404)
 

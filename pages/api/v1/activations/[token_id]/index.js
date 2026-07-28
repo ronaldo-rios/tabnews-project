@@ -2,9 +2,10 @@ import controller from 'infra/controller'
 import activation from 'models/activation'
 import { createRouter } from 'next-connect'
 
-const router = createRouter()
-router.patch(patchActivation)
-export default router.handler(controller.errorHandlers)
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .patch(controller.canRequest('read:activation_token'), patchActivation)
+  .handler(controller.errorHandlers)
 
 async function patchActivation(request, response) {
   const activationTokenId = request.query.token_id

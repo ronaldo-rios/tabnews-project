@@ -3,10 +3,10 @@ import session from 'models/session'
 import user from 'models/user'
 import { createRouter } from 'next-connect'
 
-const router = createRouter()
-router.get(getUser)
-
-export default router.handler(controller.errorHandlers)
+export default createRouter()
+  .use(controller.injectAnonymousOrUser)
+  .get(controller.canRequest('read:session'), getUser)
+  .handler(controller.errorHandlers)
 
 async function getUser(request, response) {
   const sessionToken = request.cookies.session_id
