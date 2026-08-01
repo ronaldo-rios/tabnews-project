@@ -28,7 +28,13 @@ async function postSessions(request, response) {
   const generatedSession = await session.create(authenticatedUser.id)
   controller.setSessionCookie(generatedSession.token, response)
 
-  return response.status(201).json(generatedSession)
+  const secureOutputValues = authorization.filterOutput(
+    authenticatedUser,
+    'read:session',
+    generatedSession,
+  )
+
+  return response.status(201).json(secureOutputValues)
 }
 
 async function deleteSession(request, response) {
@@ -37,5 +43,11 @@ async function deleteSession(request, response) {
   const expiredSession = await session.expireById(sessionObject.id)
   controller.clearSessionCookie(response)
 
-  return response.status(200).json(expiredSession)
+  const secureOutputValues = authorization.filterOutput(
+    request.context.user,
+    'read:session',
+    expiredSession,
+  )
+
+  return response.status(200).json(secureOutputValues)
 }

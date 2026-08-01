@@ -4,19 +4,51 @@ import orchestrator from 'tests/orchestrator'
 beforeAll(() => orchestrator.waitForServerAvailability())
 
 describe('GET to api/v1/status', () => {
-  test('Retrieving current system status', async () => {
-    const response = await fetch(`${webserver.origin}/api/v1/status`)
-    expect(response.status).toBe(200)
+  describe('Anonymous user', () => {
+    test('Retrieving current system status', async () => {
+      const response = await fetch(`${webserver.origin}/api/v1/status`)
+      expect(response.status).toBe(200)
 
-    const responseBody = await response.json()
-    expect(responseBody.updated_at).toBeDefined()
+      const responseBody = await response.json()
 
-    const parseUpdatedAt = new Date(responseBody.updated_at).toISOString()
-    expect(responseBody.updated_at).toEqual(parseUpdatedAt)
-    expect(responseBody.dependencies.database.version).toEqual('16.0')
-    expect(responseBody.dependencies.database.max_connections).toEqual(100)
-    expect(
-      responseBody.dependencies.database.opened_connections,
-    ).toBeGreaterThanOrEqual(1)
+      const parsedUpdatedAt = new Date(responseBody.updated_at).toISOString()
+      expect(responseBody.updated_at).toEqual(parsedUpdatedAt)
+
+      expect(responseBody.dependencies.database.max_connections).toEqual(100)
+      expect(responseBody.dependencies.database.opened_connections).toEqual(1)
+      expect(responseBody.dependencies.database).not.toHaveProperty('version')
+    })
+  })
+
+  describe('Default user', () => {})
+
+  describe('Privileged user', () => {
+    test('With `read:status:all`', async () => {
+      const privilegedUser = await orchestrator.createUser()
+      const activatedPrivileged =
+        await orchestrator.activateUser(privilegedUser)
+      await orchestrator.addFeaturesToUser(privilegedUser, ['read:status:all'])
+      const privilegedUserSession = await orchestrator.createSession(
+        activatedPrivileged.id,
+      )
+
+      const response = await fetch(`${webserver.origin}/api/v1/status`, {
+        headers: {
+          Cookie: `session_id=${privilegedUserSession.token}`,
+        },
+      })
+      expect(response.status).toBe(200)
+
+      const responseBody = await response.json()
+      expect(responseBody.updated_at).toBeDefined()
+
+      const parseUpdatedAt = new Date(responseBody.updated_at).toISOString()
+      expect(responseBody.updated_at).toEqual(parseUpdatedAt)
+      expect(responseBody.dependencies.database.version).toEqual('16.0')
+      expect(responseBody.dependencies.database.max_connections).toEqual(100)
+      expect(
+        responseBody.dependencies.database.opened_connections,
+      ).toBeGreaterThanOrEqual(1)
+    })
   })
 })
