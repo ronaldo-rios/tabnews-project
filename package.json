@@ -54,5 +54,8 @@
     "lint-staged": "15.2.10",
     "prettier": "3.3.3",
     "set-cookie-parser": "2.7.1"
+  },
+  "engines": {
+    "node": "24"
   }
 }
